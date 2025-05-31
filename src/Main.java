@@ -1,3 +1,5 @@
+import java.util.Collections;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -17,12 +19,17 @@ public class Main {
         }
 
         if (path != null) {
-            WorkWithFiles fileClasses = new WorkWithFiles(path);
-            var directories = fileClasses.listDirectoryContents();
-            System.out.println(directories);
-        }
-        else {
-            System.err.println("Не найден путь к каталогу");
+            var files_worker = new WorkWithFiles(path);
+
+            files_worker.processFiles();
+            var bat = files_worker.getBatFiles();
+            var prop = files_worker.getPropertiesFiles();
+            var jar = files_worker.getJarFiles();
+
+            System.out.println(bat);
+            System.out.println(prop);
+            System.out.println(jar);
+
         }
 
      }

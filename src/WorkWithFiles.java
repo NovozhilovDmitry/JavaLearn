@@ -1,52 +1,52 @@
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Stream;
+import java.nio.file.*;
+import java.io.IOException;
+import java.util.*;
+
 
 public class WorkWithFiles {
 
-    private File path;
-    private final Set<String> dirs = new HashSet<>();
+    private Path path;
+    private final Set<String> batFiles = new HashSet<>();
+    private final Set<String> propertiesFiles = new HashSet<>();
+    private final Set<String> jarFiles = new HashSet<>();
 
     public WorkWithFiles(String p) {
-        path = new File(p);
+        path = Paths.get(p);
     }
 
-    public boolean isDirectory() {
-        if (this.path.exists()) {
-            return this.path.isDirectory();
+    public void processFiles() {
+        try (Stream<Path> stream = Files.walk(path)) {
+            stream.filter(Files::isRegularFile)
+                    .forEach(this::classifyFileByExtension);
+        } catch (IOException e) {
+            System.err.println("Ошибка обхода: " + e.getMessage());
         }
-        else {
-            return false;
+    }
+
+    private void classifyFileByExtension(Path filePath) {
+        String filename = filePath.getFileName().toString().toLowerCase();
+        String absolutePath = filePath.toAbsolutePath().toString();
+
+        if (filename.endsWith(".bat")) {
+            batFiles.add(absolutePath);
+        } else if (filename.endsWith(".properties")) {
+            propertiesFiles.add(absolutePath);
+        } else if (filename.endsWith(".jar")) {
+            jarFiles.add(absolutePath);
         }
     }
 
-    public Set<String> listDirectoryContents() {
-        File[] files = this.path.listFiles();
-        if (files != null) {
-            for (File file: files) {
-                if (file.isDirectory()) {
-                    this.dirs.add(file.toString());
-                }
-            }
-        }
-        return this.dirs;
+    public Set<String> getBatFiles() {
+        return Collections.unmodifiableSet(batFiles);
     }
 
-    public void clearListDirs() {
-        this.dirs.clear();
+    public Set<String> getPropertiesFiles() {
+        return Collections.unmodifiableSet(propertiesFiles);
     }
 
-    public Set<String> getListDirs() {
-        return new HashSet<>(this.dirs);
-    }
-
-    public File getCurrentDir() {
-        return new File(this.path.getPath());
-    }
-
-    public File modifyCurrentDir(String newPath) {
-        this.path = new File(newPath);
-        return this.path;
+    public Set<String> getJarFiles() {
+        return Collections.unmodifiableSet(jarFiles);
     }
 
 }
