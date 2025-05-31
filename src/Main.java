@@ -26,10 +26,6 @@ public class Main {
             var prop = files_worker.getPropertiesFiles();
             var jar = files_worker.getJarFiles();
 
-            System.out.println(bat);
-            System.out.println(prop);
-            System.out.println(jar);
-
         }
 
      }
