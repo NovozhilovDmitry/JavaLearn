@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class WorkWithFiles {
 
-    private final File path;
+    private File path;
     private final Set<String> dirs = new HashSet<>();
 
     public WorkWithFiles(String p) {
@@ -20,7 +20,7 @@ public class WorkWithFiles {
         }
     }
 
-    public void listDirectoryContents() {
+    public Set<String> listDirectoryContents() {
         File[] files = this.path.listFiles();
         if (files != null) {
             for (File file: files) {
@@ -29,14 +29,24 @@ public class WorkWithFiles {
                 }
             }
         }
+        return this.dirs;
     }
 
     public void clearListDirs() {
         this.dirs.clear();
     }
 
-    public Set<String> returnListDirs() {
-        return this.dirs;
+    public Set<String> getListDirs() {
+        return new HashSet<>(this.dirs);
+    }
+
+    public File getCurrentDir() {
+        return new File(this.path.getPath());
+    }
+
+    public File modifyCurrentDir(String newPath) {
+        this.path = new File(newPath);
+        return this.path;
     }
 
 }
