@@ -32,6 +32,7 @@ public class LoginPage implements Container {
         FindBy.TextFieldClass.TEXT_FIELD, FindBy.PriorLabel, "Имя пользователя");
     public PRX_Button submit = button(FindBy.ButtonClass.BUTTON, FindBy.TextValue.LOGIN);
 }
+```
 
 ### Uncertainties
 1. Назначение `PRX_Jump_Button` - неясна специфика этого типа кнопки
@@ -39,4 +40,3 @@ public class LoginPage implements Container {
 3. Отличие `PRX_Table` от `PRX_InputTable`
 4. Смысл параметра `FindBy.TextValue` в некоторых методах
 5. Назначение "прыгающей кнопки" (jump button) в контексте UI
-```
