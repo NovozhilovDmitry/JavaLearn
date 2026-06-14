@@ -1,38 +1,44 @@
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        HttpResponse<String> response;
+        Orchestrator orc = new Orchestrator();
+        JiraApi jira = new JiraApi();
+        CookieManager cookieManager = new CookieManager();
+        HttpClient client = HttpClient.newHttpClient();
+        String USERNAME = orc.getJiraUser();
+        String PASSWORD = orc.getJiraPassword();
+        String ENDPOINT = orc.getJiraApiAuthorizathionUrl();
 
-        String path = null;
-        int sec = 0;
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        client = HttpClient.newBuilder()
+                .cookieHandler(cookieManager) // Связываем менеджер кук с клиентом
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
 
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
-            switch (arg) {
-                case "-path":
-                    path = args[++i];
-                    break;
+        try {
+            System.out.println("Шаг 1: Авторизация и открытие сессии в Jira...");
+            boolean loginSuccess = jira.createJiraSession(USERNAME, PASSWORD, ENDPOINT);
 
-                case "-sec":
-                    sec = Integer.parseInt(args[++i]);
-                    break;
+            if (loginSuccess) {
+                System.out.println("Успешно! Сессия создана. Пароль больше не потребуется.\n");
+                System.out.println("Получение данных о каталогах (используется кука сессии)...");
+                String issueData = jira.fetchJiraData("/rest/api/2/issue/TEST-101");
+                System.out.println("Данные задачи:\n" + issueData);
 
-                default:
-                    System.err.printf("Неизвестный параметр: %s%n", arg);
-                    return;
+            } else {
+                System.err.println("Не удалось авторизоваться. Проверьте логин и пароль.");
             }
+
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Произошла ошибка сетевого взаимодействия: " + e.getMessage());
         }
 
-        if (path != null & sec != 0) {
-            System.out.println(path);
-            System.out.println(sec);
-            Files.walk(Paths.get(path)).forEach(System.out::println);
-        }
-        else {
-            System.out.println("Ошибка");
-        }
      }
 }

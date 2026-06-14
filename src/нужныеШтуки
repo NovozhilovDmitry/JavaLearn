@@ -1,0 +1,1 @@
+System.out.println(Main.class.getClassLoader().getResource(".")); -- получить путь до директории (file:/Users/Dmitry/IdeaProjects/JavaLearn/out/production/JavaLearn/)
