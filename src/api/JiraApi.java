@@ -1,4 +1,9 @@
+package api;
+
 import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -8,9 +13,16 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 public class JiraApi {
     private static final String JIRA_BASE_URL = "https://jira.cbr.ru";
-    private static final String USERNAME = "your_username";
-    private static final String PASSWORD = "your_password";
-    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final HttpClient client;
+    private static final CookieManager cookieManager;
+    static {
+        cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookieManager);
+        client = HttpClient.newBuilder()
+                .cookieHandler(cookieManager)
+                .build();
+    }
 
     public HttpResponse<String> getDataFromUri(String uri) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()

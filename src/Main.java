@@ -1,26 +1,13 @@
+import api.JiraApi;
 import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
-import java.time.Duration;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        HttpResponse<String> response;
         Orchestrator orc = new Orchestrator();
         JiraApi jira = new JiraApi();
-        CookieManager cookieManager = new CookieManager();
-        HttpClient client = HttpClient.newHttpClient();
         String USERNAME = orc.getJiraUser();
         String PASSWORD = orc.getJiraPassword();
-        String ENDPOINT = orc.getJiraApiAuthorizathionUrl();
-
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        client = HttpClient.newBuilder()
-                .cookieHandler(cookieManager) // Связываем менеджер кук с клиентом
-                .connectTimeout(Duration.ofSeconds(10))
-                .build();
+        String ENDPOINT = orc.getJiraApiAuthorizationUrl();
 
         try {
             System.out.println("Шаг 1: Авторизация и открытие сессии в Jira...");

@@ -1,3 +1,4 @@
+package configs;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -9,7 +10,7 @@ public class ConfigReader {
     }
 
     public Properties getPropertiesData() {
-        try (InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("config.properties")) {
+        try (InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("configs/config.properties")) {
             prop.load(input);
             // записать в лог что параметры считаны
         } catch (Exception ex) {
