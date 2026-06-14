@@ -1,7 +1,8 @@
 import java.util.Properties;
 
 public class Orchestrator {
-    public static String jiraUser, jiraPassword, jiraApiAuthorizathionUrl, bdUser, bdPassword;
+    private static String jiraUser, jiraPassword, jiraApiAuthorizathionUrl, bdUser, bdPassword, jiraApiFolderTreeUrl,
+            jiraApiConfigUrl, jiraApiTestcasesUrl;
 
     static ConfigReader prop = new ConfigReader();
     static Properties propertiesData = prop.getPropertiesData();
@@ -12,6 +13,9 @@ public class Orchestrator {
         jiraUser = propertiesData.getProperty("jira.user");
         jiraPassword = propertiesData.getProperty("jira.password");
         jiraApiAuthorizathionUrl = propertiesData.getProperty("jiraApi.AuthorizathionUrl");
+        jiraApiFolderTreeUrl = propertiesData.getProperty("jiraApi.FolderTreeUrl");
+        jiraApiConfigUrl = propertiesData.getProperty("jiraApi.ConfigUrl");
+        jiraApiTestcasesUrl = propertiesData.getProperty("jiraApi.TestcasesUrl");
 
     }
 
@@ -33,6 +37,18 @@ public class Orchestrator {
 
     public String getBdPassword() {
         return bdPassword;
+    }
+
+    public String getJiraApiFolderTreeUrl() {
+        return jiraApiFolderTreeUrl;
+    }
+
+    public String getJiraApiConfigUrl() {
+        return jiraApiConfigUrl;
+    }
+
+    public String getJiraApiTestcasesUrl() {
+        return jiraApiTestcasesUrl;
     }
 
 }

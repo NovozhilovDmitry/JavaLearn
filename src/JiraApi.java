@@ -20,7 +20,7 @@ public class JiraApi {
                 .build();
              HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
         return response;
-    };
+    }
 
     public static boolean createJiraSession(String username, String password, String baseUrl) throws IOException, InterruptedException {
         String sessionUrl = JIRA_BASE_URL + baseUrl;
