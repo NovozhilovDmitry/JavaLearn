@@ -1,0 +1,27 @@
+<configuration scan="true" scanPeriod="2 seconds" debug="false"> <!--включает автоматическое сканирование файла конфигурации-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%highlight(%d{yyyy-MM-dd HH:mm:ss:SSS} %5p %t %c{2}:%L - %m%n)</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>build/logs/test-log.log</file>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} %5p %t %c{2}:%L - %m%n%caller{10}%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+    </appender>
+<!--    <logger name="o.e.jetty.security.SecurityHandler" level="ERROR"/>-->
+<!--    <logger name="org.aspectj.weaver" level="NONE"/>-->
+<!--    устанавливают уровни логирования для конкретных пакетов или классов, переопределяя уровень, заданный в корневом логгере-->
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>
