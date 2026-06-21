@@ -16,7 +16,7 @@ public class Orchestrator {
         bdPassword = propertiesData.getProperty("bd.password");
         jiraUser = propertiesData.getProperty("jira.user");
         jiraPassword = propertiesData.getProperty("jira.password");
-        jiraApiAuthorizationUrl = propertiesData.getProperty("jiraApi.AuthorizathionUrl");
+        jiraApiAuthorizationUrl = propertiesData.getProperty("jiraApi.AuthorizationUrl");
         jiraApiFolderTreeUrl = propertiesData.getProperty("jiraApi.FolderTreeUrl");
         jiraApiConfigUrl = propertiesData.getProperty("jiraApi.ConfigUrl");
         jiraApiTestcasesUrl = propertiesData.getProperty("jiraApi.TestcasesUrl");

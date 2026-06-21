@@ -1,5 +1,4 @@
 package api;
-
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -8,7 +7,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 
 
 public class JiraApi {
@@ -22,16 +20,6 @@ public class JiraApi {
         client = HttpClient.newBuilder()
                 .cookieHandler(cookieManager)
                 .build();
-    }
-
-    public HttpResponse<String> getDataFromUri(String uri) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uri))
-                .header("Accept", "application/json")
-                .GET()
-                .build();
-             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-        return response;
     }
 
     public static boolean createJiraSession(String username, String password, String baseUrl) throws IOException, InterruptedException {

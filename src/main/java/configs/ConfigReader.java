@@ -19,7 +19,6 @@ public class ConfigReader {
         } catch (Exception ex) {
             log.error(ex.toString());
             ex.printStackTrace();
-            // записать исключение в лог
         }
         return prop;
     }

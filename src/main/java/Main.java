@@ -1,16 +1,19 @@
 import api.JiraApi;
 import orchestrator.Orchestrator;
+import utils.SslHelper;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 
 public class Main {
-    public static void main(String[] args) throws IOException, InterruptedException {
-        Orchestrator orc = new Orchestrator();
-        JiraApi jira = new JiraApi();
-        String USERNAME = orc.getJiraUser();
-        String PASSWORD = orc.getJiraPassword();
-        String ENDPOINT = orc.getJiraApiAuthorizationUrl();
-        System.out.println(USERNAME + PASSWORD + ENDPOINT);
+    public static void main(String[] args) throws Exception {
+//        Orchestrator orc = new Orchestrator();
+//        JiraApi jira = new JiraApi();
+//        String USERNAME = orc.getJiraUser();
+//        String PASSWORD = orc.getJiraPassword();
+//        String ENDPOINT = orc.getJiraApiAuthorizationUrl();
+//        System.out.println(USERNAME + PASSWORD + ENDPOINT);
+
 
 //        try {
 //            System.out.println("Шаг 1: Авторизация и открытие сессии в Jira...");
