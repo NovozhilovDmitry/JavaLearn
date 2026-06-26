@@ -8,10 +8,6 @@ public class ConfigReader {
     private Properties prop = new Properties();
     private static final Logger log = LoggerFactory.getLogger(ConfigReader.class);
 
-    public Properties getProp() {
-        return prop;
-    }
-
     public Properties getPropertiesData() {
         try (InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream("configs/config.properties")) {
             prop.load(input);

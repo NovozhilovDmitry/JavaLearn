@@ -1,58 +1,56 @@
 package orchestrator;
 
 import configs.ConfigReader;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 public class Orchestrator {
-    private static String jiraUser, jiraPassword, jiraApiAuthorizationUrl, bdUser, bdPassword, jiraApiFolderTreeUrl,
-            jiraApiConfigUrl, jiraApiTestcasesUrl;
-
-    static ConfigReader prop = new ConfigReader();
-    static Properties propertiesData = prop.getPropertiesData();
-
-    public Orchestrator() {
-        bdUser = propertiesData.getProperty("bd.user");
-        bdPassword = propertiesData.getProperty("bd.password");
-        jiraUser = propertiesData.getProperty("jira.user");
-        jiraPassword = propertiesData.getProperty("jira.password");
-        jiraApiAuthorizationUrl = propertiesData.getProperty("jiraApi.AuthorizationUrl");
-        jiraApiFolderTreeUrl = propertiesData.getProperty("jiraApi.FolderTreeUrl");
-        jiraApiConfigUrl = propertiesData.getProperty("jiraApi.ConfigUrl");
-        jiraApiTestcasesUrl = propertiesData.getProperty("jiraApi.TestcasesUrl");
-
-    }
-
-    public String getJiraUser() {
-        return jiraUser;
-    }
-
-    public String getJiraPassword() {
-        return jiraPassword;
-    }
-
-    public String getJiraApiAuthorizationUrl() {
-        return jiraApiAuthorizationUrl;
-    }
+    private static final Logger log = LoggerFactory.getLogger(Orchestrator.class);
+    static Properties propertiesData = new ConfigReader().getPropertiesData();
 
     public String getBdUser() {
-        return bdUser;
+        return propertiesData.getProperty("bd.user");
     }
 
     public String getBdPassword() {
-        return bdPassword;
+        return propertiesData.getProperty("bd.password");
+    }
+
+    public String getBdConnectLine() {
+        return propertiesData.getProperty("bd.connectLine");
+    }
+
+    public String getJiraUser() {
+        return propertiesData.getProperty("jiraApi.user");
+    }
+
+    public String getJiraPassword() {
+        return propertiesData.getProperty("jiraApi.password");
+    }
+
+    public String getJiraProjectId() {
+        return propertiesData.getProperty("jiraApi.projectId");
+    }
+
+    public String getJiraMaxResults() {
+        return propertiesData.getProperty("jiraApi.maxResults");
+    }
+
+    public String getJiraApiAuthorizationUrl() {
+        return propertiesData.getProperty("jiraApi.AuthorizationUrl");
     }
 
     public String getJiraApiFolderTreeUrl() {
-        return jiraApiFolderTreeUrl;
+        return propertiesData.getProperty("jiraApi.FolderTreeUrl");
     }
 
-    public String getJiraApiConfigUrl() {
-        return jiraApiConfigUrl;
+    public String getJiraApiCustomFieldsUrl() {
+        return propertiesData.getProperty("jiraApi.CustomFieldsUrl");
     }
 
     public String getJiraApiTestcasesUrl() {
-        return jiraApiTestcasesUrl;
+        return propertiesData.getProperty("jiraApi.TestcasesUrl");
     }
 
 }
