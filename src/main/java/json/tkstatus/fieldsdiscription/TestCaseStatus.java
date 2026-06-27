@@ -1,4 +1,4 @@
-package json.getterFields;
+package json.tkstatus.fieldsdiscription;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

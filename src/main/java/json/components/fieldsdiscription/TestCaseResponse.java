@@ -1,4 +1,4 @@
-package json.getterFields;
+package json.components.fieldsdiscription;
 
 import java.util.List;
 

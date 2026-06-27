@@ -1,4 +1,4 @@
-package json.getterFields;
+package json.customfield.fieldsdiscription;
 
 public class Option {
     private boolean archived;

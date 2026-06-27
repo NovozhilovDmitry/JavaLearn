@@ -49,8 +49,8 @@ public class Orchestrator {
         return propertiesData.getProperty("jiraApi.CustomFieldsUrl");
     }
 
-    public String getJiraApiTestcasesUrl() {
-        return propertiesData.getProperty("jiraApi.TestcasesUrl");
+    public String getJiraApiTestCasesUrl() {
+        return propertiesData.getProperty("jiraApi.TestCasesUrl");
     }
 
 }

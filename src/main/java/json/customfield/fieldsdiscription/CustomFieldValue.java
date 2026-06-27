@@ -1,4 +1,4 @@
-package json.getterFields;
+package json.customfield.fieldsdiscription;
 
 public class CustomFieldValue {
     private Integer customFieldId;

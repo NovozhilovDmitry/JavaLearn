@@ -1,7 +1,7 @@
 package service;
 
-import json.getterFields.CustomField;
-import json.getterFields.Option;
+import json.customfield.fieldsdiscription.CustomField;
+import json.customfield.fieldsdiscription.Option;
 import repository.CustomFieldRepository;
 import repository.OptionRepository;
 import java.sql.Connection;
@@ -12,7 +12,7 @@ public class CustomFieldImportService {
     private final OptionRepository optionRepository = new OptionRepository();
 
     public void importFields(Connection connection, List<CustomField> fields) throws Exception {
-        for(CustomField field : fields){
+        for(CustomField field : fields) {
             fieldRepository.save(connection, field);
             List<Option> options = field.getOptions();
             if(options != null){

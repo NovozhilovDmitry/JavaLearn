@@ -1,6 +1,6 @@
 package repository;
 
-import json.getterFields.Option;
+import json.customfield.fieldsdiscription.Option;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 

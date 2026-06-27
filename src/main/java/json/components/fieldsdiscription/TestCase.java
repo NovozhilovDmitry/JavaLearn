@@ -1,4 +1,6 @@
-package json.getterFields;
+package json.components.fieldsdiscription;
+
+import json.customfield.fieldsdiscription.CustomFieldValue;
 
 import java.util.Date;
 import java.util.HashMap;

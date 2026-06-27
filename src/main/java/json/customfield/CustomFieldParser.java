@@ -1,7 +1,7 @@
-package json.parser;
+package json.customfield;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import json.getterFields.CustomField;
+import json.customfield.fieldsdiscription.CustomField;
 
 import java.io.File;
 import java.util.List;
