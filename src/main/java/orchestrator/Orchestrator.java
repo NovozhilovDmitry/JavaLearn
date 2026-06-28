@@ -53,4 +53,7 @@ public class Orchestrator {
         return propertiesData.getProperty("jiraApi.TestCasesUrl");
     }
 
+    public String getMaxWorkers() {
+        return propertiesData.getProperty("max.workers");
+    }
 }

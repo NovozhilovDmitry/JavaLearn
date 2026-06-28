@@ -2,7 +2,7 @@ import api.JiraApi;
 import orchestrator.Orchestrator;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String dataFilePath = "src/main/resources/data/";
         Orchestrator orc = new Orchestrator();
         JiraApi jira = new JiraApi();
@@ -14,6 +14,7 @@ public class Main {
         String customFieldsEndpoint = orc.getJiraApiCustomFieldsUrl();
         String folderTreeEndpoint = orc.getJiraApiFolderTreeUrl();
         String testCasesEndpoint = orc.getJiraApiTestCasesUrl();
+        String maxWorkers = orc.getMaxWorkers();
 
         try {
             System.out.println("Шаг 1: Авторизация и открытие сессии в Jira...");
