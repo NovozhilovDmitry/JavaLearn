@@ -8,6 +8,8 @@ import java.util.Properties;
 public class Orchestrator {
     private static final Logger log = LoggerFactory.getLogger(Orchestrator.class);
     static Properties propertiesData = new ConfigReader().getPropertiesData();
+    private final String maxResult = propertiesData.getProperty("jiraApi.maxResults");
+    private final String projectId = propertiesData.getProperty("jiraApi.projectId");
 
     public String getBdUser() {
         return propertiesData.getProperty("bd.user");
@@ -29,16 +31,8 @@ public class Orchestrator {
         return propertiesData.getProperty("jiraApi.password");
     }
 
-    public String getJiraProjectId() {
-        return propertiesData.getProperty("jiraApi.projectId");
-    }
-
-    public String getJiraMaxResults() {
-        return propertiesData.getProperty("jiraApi.maxResults");
-    }
-
-    public String getJiraApiAuthorizationUrl() {
-        return propertiesData.getProperty("jiraApi.AuthorizationUrl");
+    public String getJiraApiTestCaseStatusUrl() {
+        return propertiesData.getProperty("jiraApi.TestCaseStatus");
     }
 
     public String getJiraApiFolderTreeUrl() {
@@ -50,7 +44,7 @@ public class Orchestrator {
     }
 
     public String getJiraApiTestCasesUrl() {
-        return propertiesData.getProperty("jiraApi.TestCasesUrl");
+        return propertiesData.getProperty("jiraApi.TestCasesUrl").replace("maxResults=0000", "maxResults=" + maxResult).replace("(00000)", "(" + projectId + ")");
     }
 
     public String getMaxWorkers() {
