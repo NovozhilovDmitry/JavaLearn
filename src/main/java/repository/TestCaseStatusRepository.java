@@ -1,11 +1,10 @@
 package repository;
 
 import bd.SqliteConnect;
-import bd.sqliteselect.SelectResultsTkStatus;
 import json.tkstatus.fieldsdiscription.TestCaseStatus;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestCaseStatusRepository {
@@ -13,8 +12,9 @@ public class TestCaseStatusRepository {
     public TestCaseStatusRepository(SqliteConnect connection) {
         this.conn = connection.getConnection();
     }
+    private static final Logger log = LoggerFactory.getLogger(TestCaseStatusRepository.class);
 
-    public void insertIntoTable(List<TestCaseStatus> fields) {
+    public void insertIntoTableStatuses(List<TestCaseStatus> fields) {
         String sql = """
                 INSERT INTO statuses
                 (
@@ -33,29 +33,8 @@ public class TestCaseStatusRepository {
             ps.executeBatch();
             conn.commit();
             } catch (SQLException e) {
-                System.out.println("Ошибка добавления: " + e.getMessage());
+                log.error("Ошибка добавления данных: {}", e.getMessage());
             }
         }
-
-    public List<SelectResultsTkStatus> getTkStatuses() {
-        List<SelectResultsTkStatus> statuses = new ArrayList<>();
-        String sql = "SELECT * FROM statuses";
-        if (conn == null) {
-            System.out.println("Нет соединения!");
-            return statuses;
-        }
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                statuses.add(new SelectResultsTkStatus(
-                        rs.getInt("id"),
-                        rs.getString("name")
-                ));
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-        return statuses;
-    }
 }
 

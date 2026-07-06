@@ -1,32 +1,45 @@
 package repository;
 
 import json.customfield.fieldsdiscription.CustomField;
+import json.customfield.fieldsdiscription.Option;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
 
 public class CustomFieldRepository {
+    private final OptionRepository optionRepository = new OptionRepository();
+    private static final Logger log = LoggerFactory.getLogger(CustomFieldRepository.class);
 
-    public void save(Connection connection, CustomField field) throws Exception {
+    public void inserIntoTables(Connection conn, List<CustomField> fields) {
         String sql =
                 """
-                INSERT INTO custom_field
+                INSERT INTO components
                 (id,
-                 name,
-                 field_type,
-                 archived,
-                 required,
-                 project_id)
+                 name)
                 VALUES
-                (?,?,?,?,?,?)
+                (?,?)
                 """;
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, field.getId());
-        ps.setString(2, field.getName());
-        ps.setString(3, field.getType());
-        ps.setInt(4, field.isArchived() ? 1 : 0);
-        ps.setInt(5, field.isRequired() ? 1 : 0);
-        ps.setInt(6, field.getProjectId());
-        ps.executeUpdate();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            conn.setAutoCommit(false);
+            for (CustomField data: fields) {
+                ps.setInt(1, data.getId());
+                ps.setString(2, data.getName());
+                ps.addBatch();
+                List<Option> options = data.getOptions();
+                if (options != null) {
+                    optionRepository.insertIntoTableOptions(conn, data.getId(), options);
+                }
+            }
+            ps.executeBatch();
+            conn.commit();
+        } catch (SQLException e) {
+            log.error("Ошибка добавления данных: {}", e.getMessage());
+        }
     }
 
-}
+
+    }
