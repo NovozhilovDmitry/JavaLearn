@@ -34,6 +34,7 @@ public class TestCaseStatusRepository {
             }
             ps.executeBatch();
             conn.commit();
+            log.info("Внесены данные в таблицу STATUSES");
             } catch (SQLException e) {
                 log.error("Ошибка добавления данных: {}", e.getMessage());
             }
