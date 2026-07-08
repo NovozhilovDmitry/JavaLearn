@@ -16,11 +16,13 @@ public class CustomFieldRepository {
     public void inserIntoTables(Connection conn, List<CustomField> fields) {
         String sql =
                 """
-                INSERT INTO components
-                (id,
-                 name)
-                VALUES
-                (?,?)
+                MERGE into components c
+                USING ( select ? id, ? name from dual) t
+                ON (c.id=t.id)
+                WHEN MATCHED THEN
+                    UPDATE SET c.name=t.name
+                WHEN NOT MATCHED THEN
+                    INSERT (id, name) values (t.id, t.name)
                 """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -31,7 +33,7 @@ public class CustomFieldRepository {
                 ps.addBatch();
                 List<Option> options = data.getOptions();
                 if (options != null) {
-                    optionRepository.insertIntoTableOptions(conn, data.getId(), options);
+                    optionRepository.insertIntoTableOptions(ps, options);
                 }
             }
             ps.executeBatch();

@@ -15,14 +15,17 @@ public class FolderTreeRepository {
     private static final Logger log = LoggerFactory.getLogger(FolderTreeRepository.class);
 
     public void insertIntoTableTkFolders(List<FolderTreeExtractor.Result> fields) {
-        String sql = """
-                INSERT INTO tkfolders
-                (
-                id, name
-                )
-                VALUES
-                (?,?)
+        String sql =
+                """
+                MERGE into tkfolders c
+                USING ( select ? id, ? name from dual) t
+                ON (c.id=t.id)
+                WHEN MATCHED THEN
+                    UPDATE SET c.name=t.name
+                WHEN NOT MATCHED THEN
+                    INSERT (id, name) values (t.id, t.name)
                 """;
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             conn.setAutoCommit(false);
             for (FolderTreeExtractor.Result info: fields) {
