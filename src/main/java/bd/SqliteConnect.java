@@ -1,16 +1,21 @@
 package bd;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import repository.FolderTreeRepository;
+
 import java.sql.*;
 
 public class SqliteConnect {
     private Connection conn = null;
-
+    private static final Logger log = LoggerFactory.getLogger(SqliteConnect.class);
+    
     public void connect(String dbPath) {
         try {
             String url = "jdbc:sqlite:" + dbPath;
             conn = DriverManager.getConnection(url);
-            System.out.println("Соединение с БД установлено.");
+            log.info("Соединение с БД установлено.");
         } catch (SQLException e) {
-            System.out.println("Ошибка подключения: " + e.getMessage());
+            log.info("Ошибка подключения: {}", e.getMessage());
         }
     }
 
@@ -21,14 +26,14 @@ public class SqliteConnect {
     // Универсальный метод для выполнения CREATE, INSERT, UPDATE, DELETE
     public void executeUpsert(String sql) {
         if (conn == null) {
-            System.out.println("Нет соединения с базой данных!");
+            log.info("Нет соединения с базой данных!");
             return;
         }
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
-            System.out.println("Запрос успешно выполнен.");
+            log.info("Запрос успешно выполнен.");
         } catch (SQLException e) {
-            System.out.println("Ошибка выполнения запроса: " + e.getMessage());
+            log.info("Ошибка выполнения запроса: {}", e.getMessage());
         }
     }
 
@@ -37,10 +42,10 @@ public class SqliteConnect {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
-                System.out.println("Соединение с БД успешно закрыто.");
+                log.info("Соединение с БД успешно закрыто.");
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка при закрытии соединения: " + e.getMessage());
+            log.info("Ошибка при закрытии соединения: {}", e.getMessage());
         }
     }
 }

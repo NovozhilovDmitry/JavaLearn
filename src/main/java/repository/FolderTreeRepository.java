@@ -32,15 +32,14 @@ public class FolderTreeRepository {
                 if (info.id != 0 && info.name != null && !info.name.isEmpty()) {
                     ps.setLong(1, info.id);
                     ps.setString(2, info.name);
-                    System.out.println(info.id + ": " + info.name);
                     ps.addBatch();
                 }
             }
             ps.executeBatch();
             conn.commit();
+            log.info("Внесены данные в таблицу TKFOLDERS");
         } catch (SQLException e) {
-            log.error("Ошибка добавления данных: " + e.getMessage());
+            log.error("Ошибка добавления данных: {}", e.getMessage());
         }
     }
-
 }
