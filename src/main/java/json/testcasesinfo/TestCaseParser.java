@@ -1,8 +1,8 @@
-package json.components;
+package json.testcasesinfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import json.components.fieldsdiscription.TestCase;
-import json.components.fieldsdiscription.TestCaseResponse;
+import json.testcasesinfo.fieldsdiscription.TestCase;
+import json.testcasesinfo.fieldsdiscription.TestCaseResponse;
 
 import java.io.File;
 import java.io.IOException;

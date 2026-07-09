@@ -1,4 +1,4 @@
-package json.components.fieldsdiscription;
+package json.testcasesinfo.fieldsdiscription;
 
 import json.customfield.fieldsdiscription.CustomFieldValue;
 
