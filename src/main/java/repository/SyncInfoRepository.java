@@ -14,23 +14,23 @@ public class SyncInfoRepository {
     }
     private static final Logger log = LoggerFactory.getLogger(SyncInfoRepository.class);
 
-    public void insertIntoTableSyncInfo(String sync_name) {
+    public void insertIntoTableSyncInfo(String entity_name) {
         // TODO: поправить скрипт
         String sql =
                 """
                 MERGE into SYNC_INFO c
-                USING ( select ? sync_name, ? name from dual) t
-                ON (c.id=t.id)
+                USING ( select ? entity_name from dual) t
+                ON (c.entity_name=t.entity_name)
                 WHEN MATCHED THEN
-                    UPDATE SET c.name=t.name
+                    UPDATE SET c.last_sync=sysdate
                 WHEN NOT MATCHED THEN
-                    INSERT (id, name) values (t.id, t.name)  (sysdate)
+                    INSERT (entity_name, last_sync) values (t.entity_name, sysdate)
                 """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, sync_name);
+            ps.setString(1, entity_name);
             ps.execute();
-            log.info("Внесены данные в таблицу SYNC_INFO по сущности {}", sync_name);
+            log.info("Внесены данные в таблицу SYNC_INFO по сущности {}", entity_name);
         } catch (SQLException e) {
             log.error("Ошибка добавления данных: {}", e.getMessage());
         }
