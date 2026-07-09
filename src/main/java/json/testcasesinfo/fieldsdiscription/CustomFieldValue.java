@@ -1,10 +1,19 @@
-package json.customfield.fieldsdiscription;
+package json.testcasesinfo.fieldsdiscription;
 
 public class CustomFieldValue {
     private Integer customFieldId;
     private String stringValue;
     private Integer intValue;
     private Boolean booleanValue;
+    private String dateValue;
+
+    public String getDateValue() {
+        return dateValue;
+    }
+
+    public void setDateValue(String dateValue) {
+        this.dateValue = dateValue;
+    }
 
     public Integer getCustomFieldId() {
         return customFieldId;
