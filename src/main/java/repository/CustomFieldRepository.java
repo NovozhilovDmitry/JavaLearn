@@ -12,7 +12,6 @@ import java.util.List;
 
 public class CustomFieldRepository {
     private final Connection conn;
-    private final OptionRepository optionRepository = new OptionRepository();
     private static final Logger log = LoggerFactory.getLogger(CustomFieldRepository.class);
 
     public CustomFieldRepository(SqliteConnect connection) {
@@ -39,7 +38,13 @@ public class CustomFieldRepository {
                 ps.addBatch();
                 List<Option> options = data.getOptions();
                 if (options != null) {
-                    optionRepository.insertIntoTableOptions(ps, options);
+                    for (Option option : options) {
+                        if (!option.isArchived()) {
+                            ps.setInt(1, option.getId());
+                            ps.setString(2, option.getName());
+                            ps.addBatch();
+                        }
+                    }
                 }
             }
             ps.executeBatch();
