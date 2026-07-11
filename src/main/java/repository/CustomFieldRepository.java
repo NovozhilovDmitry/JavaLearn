@@ -8,33 +8,41 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 public class CustomFieldRepository {
     private final Connection conn;
     private static final Logger log = LoggerFactory.getLogger(CustomFieldRepository.class);
-
+    private final HashMap<Integer, String> components = new HashMap<>();
     public CustomFieldRepository(SqliteConnect connection) {
         this.conn = connection.getConnection();
     }
 
     public void inserIntoTableComponents(List<CustomField> fields) {
-        String sql =
-                """
-                MERGE into components c
-                USING ( select ? id, ? name from dual) t
-                ON (c.id=t.id)
-                WHEN MATCHED THEN
-                    UPDATE SET c.name=t.name
-                WHEN NOT MATCHED THEN
-                    INSERT (id, name) values (t.id, t.name)
-                """;
+//        String sql =
+//                """
+//                MERGE into components c
+//                USING ( select ? id, ? name from dual) t
+//                ON (c.id=t.id)
+//                WHEN MATCHED THEN
+//                    UPDATE SET c.name=t.name
+//                WHEN NOT MATCHED THEN
+//                    INSERT (id, name) values (t.id, t.name)
+//                """;
+
+        String sql = """
+                INSERT INTO components (
+                    id,
+                    name)
+                VALUES (?, ?)""";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             conn.setAutoCommit(false);
             for (CustomField data: fields) {
                 ps.setInt(1, data.getId());
                 ps.setString(2, data.getName());
+                components.put(data.getId(), data.getName());
                 ps.addBatch();
                 List<Option> options = data.getOptions();
                 if (options != null) {
@@ -42,6 +50,7 @@ public class CustomFieldRepository {
                         if (!option.isArchived()) {
                             ps.setInt(1, option.getId());
                             ps.setString(2, option.getName());
+                            components.put(option.getId(), option.getName());
                             ps.addBatch();
                         }
                     }
@@ -55,5 +64,8 @@ public class CustomFieldRepository {
         }
     }
 
+    public HashMap<Integer, String> getComponentsDict() {
+        return this.components;
+    }
 
     }

@@ -1,8 +1,6 @@
 package bd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import repository.FolderTreeRepository;
-
 import java.sql.*;
 
 public class SqliteConnect {

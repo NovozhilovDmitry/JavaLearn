@@ -1,17 +1,28 @@
 package bd;
 
 import orchestrator.Orchestrator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class OracleConnection {
-    static Orchestrator orc = new Orchestrator();
-    private static final String connectionLine = orc.getBdConnectLine();
-    private static final String URL = "jdbc:oracle:thin:@" + connectionLine;
-    private static final String bdUser = orc.getBdUser();
-    private static final String bdPassword = orc.getBdPassword();
+    private static Connection conn = null;
+    private static final Logger log = LoggerFactory.getLogger(OracleConnection.class);
+
+    public void connect(String dbPath, String bdUser, String bdPassword) {
+        try {
+            String url = "jdbc:oracle:thin:@" + dbPath;
+            conn = DriverManager.getConnection(url, bdUser, bdPassword);
+            log.info("Соединение с БД установлено.");
+        } catch (SQLException e) {
+            log.info("Ошибка подключения: {}", e.getMessage());
+        }
+    }
 
     public static Connection getConnection() throws Exception {
-        return DriverManager.getConnection(URL, bdUser, bdPassword);
+        return conn;
     }
 }

@@ -15,7 +15,6 @@ public class SyncInfoRepository {
     private static final Logger log = LoggerFactory.getLogger(SyncInfoRepository.class);
 
     public void insertIntoTableSyncInfo(String entity_name) {
-        // TODO: поправить скрипт
         String sql =
                 """
                 MERGE into SYNC_INFO c

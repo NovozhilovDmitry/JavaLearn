@@ -1,8 +1,6 @@
 package json.testcasesinfo.fieldsdiscription;
 
-import json.customfield.fieldsdiscription.CustomFieldValue;
-
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,14 +10,14 @@ public class TestCase {
     private String name;
     private Integer statusId;
     private List<CustomFieldValue> customFieldValues;
-    private HashMap<String, String> lastTestResultStatus; //?
+    private HashMap<String, String> lastTestResultStatus;
     private String owner;
     private Integer estimatedTime;
     private String componentId;
     private String updatedBy;
-    private Date updatedOn; //?
+    private Instant updatedOn;
     private Byte majorVersion;
-    private Date createdOn; //?
+    private String createdOn;
     private Integer folderId;
     private Integer priorityId;
     private List<String> labels;
@@ -99,11 +97,11 @@ public class TestCase {
         this.updatedBy = updatedBy;
     }
 
-    public Date getUpdatedOn() {
+    public Instant getUpdatedOn() {
         return updatedOn;
     }
 
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(Instant updatedOn) {
         this.updatedOn = updatedOn;
     }
 
@@ -115,11 +113,11 @@ public class TestCase {
         this.majorVersion = majorVersion;
     }
 
-    public Date getCreatedOn() {
+    public String getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
     }
 
