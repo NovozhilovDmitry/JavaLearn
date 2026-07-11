@@ -13,7 +13,7 @@ public class SqliteConnect {
             conn = DriverManager.getConnection(url);
             log.info("Соединение с БД установлено.");
         } catch (SQLException e) {
-            log.info("Ошибка подключения: {}", e.getMessage());
+            log.info("Ошибка подключения: {}", e.getMessage(), e);
         }
     }
 
@@ -31,7 +31,7 @@ public class SqliteConnect {
             stmt.executeUpdate(sql);
             log.info("Запрос успешно выполнен.");
         } catch (SQLException e) {
-            log.info("Ошибка выполнения запроса: {}", e.getMessage());
+            log.info("Ошибка выполнения запроса: {}", e.getMessage(), e);
         }
     }
 
@@ -43,7 +43,7 @@ public class SqliteConnect {
                 log.info("Соединение с БД успешно закрыто.");
             }
         } catch (SQLException e) {
-            log.info("Ошибка при закрытии соединения: {}", e.getMessage());
+            log.info("Ошибка при закрытии соединения: {}", e.getMessage(), e);
         }
     }
 }
