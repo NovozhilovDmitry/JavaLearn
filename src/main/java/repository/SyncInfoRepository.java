@@ -31,7 +31,7 @@ public class SyncInfoRepository {
             ps.execute();
             log.info("Внесены данные в таблицу SYNC_INFO по сущности {}", entity_name);
         } catch (SQLException e) {
-            log.error("Ошибка добавления данных: {}", e.getMessage());
+            log.error("Ошибка добавления данных: {}", e.getMessage(), e);
         }
     }
 

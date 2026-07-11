@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConfigReader {
-    private Properties prop = new Properties();
+    private final Properties prop = new Properties();
     private static final Logger log = LoggerFactory.getLogger(ConfigReader.class);
 
     public Properties getPropertiesData() {
@@ -14,7 +14,6 @@ public class ConfigReader {
             log.info("Загрузка параметров прошла успешно");
         } catch (Exception ex) {
             log.error(ex.toString());
-            ex.printStackTrace();
         }
         return prop;
     }

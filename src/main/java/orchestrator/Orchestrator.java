@@ -43,8 +43,12 @@ public class Orchestrator {
         return propertiesData.getProperty("jiraApi.CustomFieldsUrl");
     }
 
-    public String getJiraApiTestCasesUrl() {
-        return propertiesData.getProperty("jiraApi.TestCasesUrl").replace("maxResults=0000", "maxResults=" + maxResult).replace("(00000)", "(" + projectId + ")");
+    public String getJiraApiTestCaseInfoUrl() {
+        return propertiesData.getProperty("jiraApi.TestCaseInfoUrl").replace("maxResults=0000", "maxResults=" + maxResult).replace("(00000)", "(" + projectId + ")");
+    }
+
+    public String getJiraApiTestCaseUrl(String name) {
+        return propertiesData.getProperty("jiraApi.TestCaseUrl").replace("(TASK-NUMBER)", name);
     }
 
     public String getMaxWorkers() {

@@ -39,7 +39,7 @@ public class FolderTreeRepository {
             conn.commit();
             log.info("Внесены данные в таблицу TKFOLDERS");
         } catch (SQLException e) {
-            log.error("Ошибка добавления данных: {}", e.getMessage());
+            log.error("Ошибка добавления данных: {}", e.getMessage(), e);
         }
     }
 }
