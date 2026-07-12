@@ -13,7 +13,7 @@ public class OracleConnect {
 
     public void connect(String dbPath, String user, String password) {
         try {
-            String url = "jdbc:oracle:thin:@" + dbPath;
+            String url = "jdbc:oracle:thin:@//" + dbPath;
             conn = DriverManager.getConnection(url, user, password);
             log.info("Соединение с Oracle установлено.");
         } catch (SQLException e) {
