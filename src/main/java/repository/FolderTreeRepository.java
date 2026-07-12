@@ -1,6 +1,6 @@
 package repository;
 
-import bd.SqliteConnect;
+import bd.OracleConnect;
 import json.folders.FolderTreeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FolderTreeRepository {
     private final Connection conn;
-    public FolderTreeRepository(SqliteConnect connection) {
+    public FolderTreeRepository(OracleConnect connection) {
         this.conn = connection.getConnection();
     }
     private static final Logger log = LoggerFactory.getLogger(FolderTreeRepository.class);

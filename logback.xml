@@ -9,7 +9,7 @@
         <append>true</append>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>UTF-8</charset>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} %5p %t %c{2}:%L - %replace(%caller{10}){'Caller\+\d+\t', ''}%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss:SSS} %5p %t %c{2}:%L - %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
@@ -17,9 +17,6 @@
             <onMismatch>ACCEPT</onMismatch>
         </filter>
     </appender>
-<!--    <logger name="o.e.jetty.security.SecurityHandler" level="ERROR"/>-->
-<!--    <logger name="org.aspectj.weaver" level="NONE"/>-->
-<!--    устанавливают уровни логирования для конкретных пакетов или классов, переопределяя уровень, заданный в корневом логгере-->
     <root level="info">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>

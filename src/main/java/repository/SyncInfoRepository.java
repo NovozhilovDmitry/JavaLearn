@@ -1,6 +1,6 @@
 package repository;
 
-import bd.SqliteConnect;
+import bd.OracleConnect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class SyncInfoRepository {
     private final Connection conn;
-    public SyncInfoRepository(SqliteConnect connection) {
+    public SyncInfoRepository(OracleConnect connection) {
         this.conn = connection.getConnection();
     }
     private static final Logger log = LoggerFactory.getLogger(SyncInfoRepository.class);
