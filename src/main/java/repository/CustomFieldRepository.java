@@ -16,11 +16,10 @@ public class CustomFieldRepository {
     private final Connection conn;
     private static final Logger log = LoggerFactory.getLogger(CustomFieldRepository.class);
     private final HashMap<Integer, String> components = new HashMap<>();
-    private final HashMap<String, Integer> idComponents = new HashMap<>();
+    private final HashMap<Integer, String> idComponents = new HashMap<>();
 
     public CustomFieldRepository(OracleConnect connection) {
         this.conn = connection.getConnection();
-        fillDict(idComponents);
     }
 
     public void inserIntoTableComponents(List<CustomField> fields) {
@@ -40,7 +39,7 @@ public class CustomFieldRepository {
             for (CustomField data: fields) {
                 ps.setInt(1, data.getId());
                 ps.setString(2, data.getName());
-                updateDict(idComponents, data.getName(), data.getId());
+                fillDict(idComponents, data.getName(), data.getId());
                 components.put(data.getId(), data.getName());
                 ps.addBatch();
                 List<Option> options = data.getOptions();
@@ -63,19 +62,16 @@ public class CustomFieldRepository {
         }
     }
 
-    private void fillDict(HashMap<String, Integer> dict) {
-        dict.put("Сервер", null);
-        dict.put("Вид тестирования", null);
-        dict.put("Утвердивший ТК техлид", null);
-        dict.put("Релиз, для которого ТК актуализирован", null);
-        dict.put("Роль пользователя", null);
-        dict.put("Функциональность", null);
-        dict.put("АРМ (начальный статус)", null);
-    }
-
-    private void updateDict(HashMap<String, Integer> dict, String name, Integer value) {
-        if (dict.containsKey(name)) {
-            dict.replace(name, value);
+    private void fillDict(HashMap<Integer, String> dict, String name, Integer value) {
+        switch (name) {
+            case "Сервер",
+                 "Вид тестирования",
+                 "Утвердивший ТК техлид",
+                 "Релиз, для которого ТК актуализирован",
+                 "Роль пользователя",
+                 "Функциональность",
+                 "АРМ (начальный статус)":
+                dict.put(value, name);
         }
     }
 
@@ -83,7 +79,7 @@ public class CustomFieldRepository {
         return this.components;
     }
 
-    public HashMap<String, Integer> getMainComponentsDict() {
+    public HashMap<Integer, String> getMainComponentsDict() {
         return this.idComponents;
     }
 
