@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class OracleConnect {
     private Connection conn = null;
@@ -23,20 +22,6 @@ public class OracleConnect {
 
     public Connection getConnection() {
         return conn;
-    }
-
-    public void executeUpsert(String sql) {
-        if (conn == null) {
-            log.error("Нет соединения с БД!");
-            return;
-        }
-
-        try (Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(sql);
-            log.info("Запрос успешно выполнен.");
-        } catch (SQLException e) {
-            log.error("Ошибка выполнения запроса: {}", e.getMessage(), e);
-        }
     }
 
     public void disconnect() {
