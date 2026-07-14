@@ -14,7 +14,7 @@ public class TestCaseStatusRepository {
     }
     private static final Logger log = LoggerFactory.getLogger(TestCaseStatusRepository.class);
 
-    public void insertIntoTableStatuses(List<TestCaseStatus> fields) {
+    public void insertIntoTableStatuses(List<TestCaseStatus> fields) throws SQLException {
         String sql =
                 """
                 MERGE into statuses c
@@ -33,11 +33,12 @@ public class TestCaseStatusRepository {
                 ps.addBatch();
             }
             ps.executeBatch();
-            conn.commit();
             log.info("Внесены данные в таблицу STATUSES");
-            } catch (SQLException e) {
-                log.error("Ошибка добавления данных: {}", e.getMessage(), e);
-            }
+            new SyncInfoRepository(conn).insertIntoTableSyncInfo("STATUSES");
+            conn.commit();
+        } catch (SQLException e) {
+            log.error("Ошибка добавления данных: {}", e.getMessage(), e);
+            conn.rollback();
         }
+    }
 }
-

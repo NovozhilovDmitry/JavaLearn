@@ -22,7 +22,7 @@ public class TestCaseInfoRepository {
 
     public void insertIntoTkInfo(List<TestCase> testCasesInfo,
                                  HashMap<Integer, String> optionComponents,
-                                 HashMap<Integer, String> mainComponents) {
+                                 HashMap<Integer, String> mainComponents) throws SQLException {
         String sqlTkInfo =
                 """
                 MERGE into TK_INFO c
@@ -65,36 +65,13 @@ public class TestCaseInfoRepository {
                 ps.addBatch();
             }
             ps.executeBatch();
+            log.info("Внесены данные в таблицы TK_INFO, TKCOMMONFIELDS");
+            new SyncInfoRepository(conn).insertIntoTableSyncInfo("TKINFO");
+            new SyncInfoRepository(conn).insertIntoTableSyncInfo("TKCOMMONFIELDS");
             conn.commit();
-            log.info("Внесены данные в таблицу TK_INFO");
         } catch (SQLException e) {
             log.error("Ошибка добавления данных: {}", e.getMessage(), e);
+            conn.rollback();
         }
-
-
-
-
-//        try (PreparedStatement ps = conn.prepareStatement(sqlTkInfo)) {
-//            conn.setAutoCommit(false);
-//            for (TestCase info: testCasesInfo) {
-//                ps.setInt(1, info.getId());
-//                ps.setString(2, info.getKey());
-//                ps.setString(3, info.getName());
-//                ps.setInt(4, info.getStatusId());
-//                ps.setInt(5, info.getFolderId());
-//                ps.setString(6, info.getOwner());
-//                ps.setString(7, info.getUpdatedBy());
-//                ps.setTimestamp(8, Timestamp.from(info.getUpdatedOn()));
-//                ps.addBatch();
-//            }
-//            ps.executeBatch();
-//            conn.commit();
-//            log.info("Внесены данные в таблицу TK_INFO");
-//        } catch (SQLException e) {
-//            log.error("Ошибка добавления данных: {}", e.getMessage(), e);
-//        }
-
     }
-
-
 }

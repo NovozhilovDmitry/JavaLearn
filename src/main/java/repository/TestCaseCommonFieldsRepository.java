@@ -18,7 +18,7 @@ public class TestCaseCommonFieldsRepository {
                                          Integer tkId,
                                          List<CustomFieldValue> customField,
                                          HashMap<Integer, String> optionComponents,
-                                         HashMap<Integer, String> mainComponents) {
+                                         HashMap<Integer, String> mainComponents) throws SQLException {
         String sqlTkCommonFields =
                 """
                 MERGE into tkcommonfields c
@@ -107,6 +107,7 @@ public class TestCaseCommonFieldsRepository {
             ps.executeBatch();
         } catch (SQLException e) {
             log.error("Ошибка добавления данных: {}", e.getMessage(), e);
+            conn.rollback();
         }
     }
 }

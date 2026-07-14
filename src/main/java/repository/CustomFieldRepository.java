@@ -1,7 +1,6 @@
 package repository;
 
 import bd.OracleConnect;
-import bd.SqliteConnect;
 import json.customfield.fieldsdiscription.CustomField;
 import json.customfield.fieldsdiscription.Option;
 import org.slf4j.Logger;
@@ -22,7 +21,7 @@ public class CustomFieldRepository {
         this.conn = connection.getConnection();
     }
 
-    public void inserIntoTableComponents(List<CustomField> fields) {
+    public void inserIntoTableComponents(List<CustomField> fields) throws SQLException {
         String sql =
                 """
                 MERGE into components c
@@ -55,10 +54,12 @@ public class CustomFieldRepository {
                 }
             }
             ps.executeBatch();
-            conn.commit();
             log.info("Внесены данные в таблицу COMPONENTS");
+            new SyncInfoRepository(conn).insertIntoTableSyncInfo("COMPONENTS");
+            conn.commit();
         } catch (SQLException e) {
             log.error("Ошибка добавления данных: {}", e.getMessage(), e);
+            conn.rollback();
         }
     }
 

@@ -14,7 +14,7 @@ public class FolderTreeRepository {
     }
     private static final Logger log = LoggerFactory.getLogger(FolderTreeRepository.class);
 
-    public void insertIntoTableTkFolders(List<FolderTreeExtractor.Result> fields) {
+    public void insertIntoTableTkFolders(List<FolderTreeExtractor.Result> fields) throws SQLException {
         String sql =
                 """
                 MERGE into tkfolders c
@@ -36,10 +36,12 @@ public class FolderTreeRepository {
                 }
             }
             ps.executeBatch();
-            conn.commit();
             log.info("Внесены данные в таблицу TKFOLDERS");
+            new SyncInfoRepository(conn).insertIntoTableSyncInfo("TKFOLDERS");
+            conn.commit();
         } catch (SQLException e) {
             log.error("Ошибка добавления данных: {}", e.getMessage(), e);
+            conn.rollback();
         }
     }
 }
