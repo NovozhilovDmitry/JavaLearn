@@ -9,8 +9,8 @@ import java.sql.SQLException;
 
 public class SyncInfoRepository {
     private final Connection conn;
-    public SyncInfoRepository(OracleConnect connection) {
-        this.conn = connection.getConnection();
+    public SyncInfoRepository(Connection connection) {
+        this.conn = connection;
     }
     private static final Logger log = LoggerFactory.getLogger(SyncInfoRepository.class);
 
