@@ -93,7 +93,7 @@ public class TestCase {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String a1) {
+    public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
