@@ -7,9 +7,9 @@ import json.testcasesinfo.fieldsdiscription.TestCaseResponse;
 import java.io.File;
 import java.util.List;
 
-public class TestCaseParser {
+public class TestCaseInfoParser {
     private final ObjectMapper mapper;
-    public TestCaseParser() {
+    public TestCaseInfoParser() {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
     }
