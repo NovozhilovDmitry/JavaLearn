@@ -1,7 +1,6 @@
 package repository;
 
 import bd.OracleConnect;
-import json.testcasesinfo.fieldsdiscription.CustomFieldValue;
 import json.testcasesinfo.fieldsdiscription.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 
