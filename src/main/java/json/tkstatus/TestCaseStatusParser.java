@@ -3,12 +3,10 @@ package json.tkstatus;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import json.tkstatus.fieldsdiscription.TestCaseStatus;
-
 import java.io.File;
 import java.util.List;
 
 public class TestCaseStatusParser {
-    // через данный класс будем парсить Json файл с структурой [{}] (https://jira.cbr.ru/rest/tests/1.0/project/28106/testcasesstatus)
     private final ObjectMapper mapper;
 
     public TestCaseStatusParser() {

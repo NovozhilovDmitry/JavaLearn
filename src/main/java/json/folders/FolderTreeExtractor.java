@@ -1,10 +1,10 @@
 package json.folders;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FolderTreeExtractor {
-
     public List<Result> extract(JsonNode root) {
         List<Result> result = new ArrayList<>();
         walk(root, result);

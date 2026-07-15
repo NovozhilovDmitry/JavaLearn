@@ -1,4 +1,5 @@
 package api;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
@@ -14,7 +15,6 @@ import java.net.http.HttpResponse;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
-
 
 public class JiraApi {
     private final String JIRA_BASE_URL;
