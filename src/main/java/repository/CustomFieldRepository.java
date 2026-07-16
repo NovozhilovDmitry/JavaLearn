@@ -34,7 +34,6 @@ public class CustomFieldRepository {
                 """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            conn.setAutoCommit(false);
             for (CustomField data: fields) {
                 ps.setInt(1, data.getId());
                 ps.setString(2, data.getName());
@@ -83,5 +82,4 @@ public class CustomFieldRepository {
     public HashMap<Integer, String> getMainComponentsDict() {
         return this.idComponents;
     }
-
-    }
+}

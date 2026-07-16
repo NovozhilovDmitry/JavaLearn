@@ -25,11 +25,9 @@ public class FolderTreeExtractor {
         }
     }
 
-    // Если нужны еще данные, то добавляем тут теги
     public static class Result {
         public long id;
         public String name;
-
         public Result(long id, String name) {
             this.id = id;
             this.name = name;

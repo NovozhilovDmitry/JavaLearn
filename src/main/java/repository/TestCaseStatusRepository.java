@@ -26,7 +26,6 @@ public class TestCaseStatusRepository {
                     INSERT (id, name) values (t.id, t.name)
                 """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            conn.setAutoCommit(false);
             for (TestCaseStatus info: fields) {
                 ps.setInt(1, info.getId());
                 ps.setString(2, info.getName());

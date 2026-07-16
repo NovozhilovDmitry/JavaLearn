@@ -8,7 +8,6 @@ import java.util.List;
 
 public class TestCaseStatusParser {
     private final ObjectMapper mapper;
-
     public TestCaseStatusParser() {
         mapper = new ObjectMapper();
     }

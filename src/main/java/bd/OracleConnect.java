@@ -14,6 +14,7 @@ public class OracleConnect {
         try {
             String url = "jdbc:oracle:thin:@//" + dbPath;
             conn = DriverManager.getConnection(url, user, password);
+            conn.setAutoCommit(false);
             log.info("Соединение с Oracle установлено.");
         } catch (SQLException e) {
             log.error("Ошибка подключения: {}", e.getMessage(), e);

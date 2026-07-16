@@ -27,7 +27,6 @@ public class FolderTreeRepository {
                 """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            conn.setAutoCommit(false);
             for (FolderTreeExtractor.Result info: fields) {
                 if (info.id != 0 && info.name != null && !info.name.isEmpty()) {
                     ps.setLong(1, info.id);
