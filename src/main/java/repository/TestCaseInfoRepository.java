@@ -4,10 +4,8 @@ import bd.OracleConnect;
 import json.testcasesinfo.fieldsdiscription.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.sql.PreparedStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +46,6 @@ public class TestCaseInfoRepository {
 
         try (PreparedStatement ps = conn.prepareStatement(sqlTkInfo))
         {
-            conn.setAutoCommit(false);
             for (TestCase info: testCasesInfo) {
                 ps.setInt(1, info.getId());
                 ps.setString(2, info.getKey());
@@ -71,5 +68,48 @@ public class TestCaseInfoRepository {
             log.error("Ошибка добавления данных: {}", e.getMessage(), e);
             conn.rollback();
         }
+    }
+
+    public List<Integer> getIdFromTkInfo() {
+        List<Integer> tempId = new ArrayList<>();
+        String sql =
+                """
+                SELECT id
+                FROM tk_info
+                WHERE trunc(UPDATEDON, 'DDD') > (SELECT trunc(LAST_SYNC, 'DDD')
+                                                 FROM sync_info
+                                                 WHERE ENTITY_NAME = 'TKINFO')
+                """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Integer id = rs.getInt("id");
+                tempId.add(id);
+            }
+        } catch (SQLException e) {
+            log.error("Ошибка выполнения запроса: {}", e.getMessage(), e);
+        }
+        return tempId;
+    }
+
+    public List<Integer> getIdFromTkInfoWithoutCondition() {
+        List<Integer> tempId = new ArrayList<>();
+        String sql =
+                """
+                SELECT id
+                FROM tk_info
+                """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Integer id = rs.getInt("id");
+                tempId.add(id);
+            }
+        } catch (SQLException e) {
+            log.error("Ошибка выполнения запроса: {}", e.getMessage(), e);
+        }
+        return tempId;
     }
 }
