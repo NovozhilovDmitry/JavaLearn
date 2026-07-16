@@ -13,6 +13,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.1'
     implementation 'com.oracle.database.jdbc:ojdbc8:19.8.0.0'
+    implementation 'org.jsoup:jsoup:1.21.1'
 }
 
 application {
@@ -23,11 +24,10 @@ run {
     standardInput = System.in
     systemProperty 'logback.configurationFile', 'logback.xml'
 }
-//
-// tasks.withType(JavaExec) {
-//     systemProperty "javax.net.ssl.trustStore",
-//             "$projectDir/src/main/resources/myTrustStore.jks"
-//
-//     systemProperty "javax.net.ssl.trustStorePassword",
-//             "changeit"
-// }
+
+tasks.named("run") {
+    jvmArgs += [
+            "-Dstdout.encoding=UTF-8",
+            "-Dstderr.encoding=UTF-8"
+    ]
+}
