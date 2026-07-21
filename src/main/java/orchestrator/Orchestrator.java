@@ -47,8 +47,8 @@ public class Orchestrator {
         return propertiesData.getProperty("jiraApi.TestCaseInfoUrl").replace("maxResults=0000", "maxResults=" + maxResult).replace("(00000)", "(" + projectId + ")");
     }
 
-    public String getJiraApiTestCaseUrl(String name) {
-        return propertiesData.getProperty("jiraApi.TestCaseUrl").replace("(TASK-NUMBER)", name);
+    public String getJiraApiTestCaseUrl() {
+        return propertiesData.getProperty("jiraApi.TestCaseUrl");
     }
 
     public String getMaxWorkers() {
