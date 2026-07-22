@@ -17,13 +17,16 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 public class JiraApi {
-    private final String JIRA_BASE_URL;
+    private final String jiraBaseUrl;
+    private final String authHeader;
     private static HttpClient client;
     private static final CookieManager cookieManager = new CookieManager();
     private static final Logger log = LoggerFactory.getLogger(JiraApi.class);
-    public JiraApi(String base_url) {
-        this.JIRA_BASE_URL = base_url;
+    public JiraApi(String baseUrl, String userName, String password) {
+        this.jiraBaseUrl = baseUrl;
+        this.authHeader = "Basic " + new String(Base64.getEncoder().encode((userName+":"+password).getBytes()));
     }
+
     static {
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         try {
@@ -47,16 +50,14 @@ public class JiraApi {
                     .build();
         }
     }
-    public String getDataFromUrl(String username, String password, String apiEndpoint) throws IOException, InterruptedException {
-        String sessionUrl = JIRA_BASE_URL + apiEndpoint;
-        String auth = username + ":" + password;
-        byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes());
-        String authHeaderValue = "Basic " + new String(encodedAuth);
+
+    public String getDataFromUrl(String apiEndpoint) throws IOException, InterruptedException {
+        String sessionUrl = jiraBaseUrl + apiEndpoint;
         HttpRequest loginRequest = HttpRequest.newBuilder()
                 .uri(URI.create(sessionUrl))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
-                .header("Authorization", authHeaderValue)
+                .header("Authorization", authHeader)
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(loginRequest, HttpResponse.BodyHandlers.ofString());
@@ -68,21 +69,5 @@ public class JiraApi {
             throw new IOException("Jira API вернула ошибку " + response.statusCode() + " для адреса " + sessionUrl);
         }
     }
-    public String fetchJiraDataNotAuth(String apiEndpoint) throws IOException, InterruptedException {
-        String targetUrl = JIRA_BASE_URL + apiEndpoint;
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(targetUrl))
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .GET()
-                .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() == 200) {
-            return response.body();
-        } else {
-            System.err.println("Ошибка авторизации. Код ответа Jira: " + response.statusCode());
-            System.err.println("Детали: " + response.body());
-            throw new IOException("Jira API вернула ошибку " + response.statusCode() + " для адреса " + targetUrl);
-        }
-    }
+
 }
