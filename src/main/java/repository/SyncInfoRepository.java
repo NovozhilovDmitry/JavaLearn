@@ -21,6 +21,7 @@ public class SyncInfoRepository {
                         WHEN NOT MATCHED THEN
                             INSERT (entity_name, last_sync) values (t.entity_name, sysdate)
                         """;
+
         try (Connection conn = connection.getConnection()) {
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, entity_name);

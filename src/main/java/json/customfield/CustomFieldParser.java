@@ -15,6 +15,6 @@ public class CustomFieldParser {
     public List<CustomField> parse(String path) throws Exception {
         return mapper.readValue(
         new File(path),
-        new TypeReference<List<CustomField>>() {});
+        new TypeReference<>() {});
     }
 }

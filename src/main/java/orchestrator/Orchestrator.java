@@ -1,12 +1,9 @@
 package orchestrator;
 
 import configs.ConfigReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 public class Orchestrator {
-    private static final Logger log = LoggerFactory.getLogger(Orchestrator.class);
     static Properties propertiesData = new ConfigReader().getPropertiesData();
     private final String maxResult = propertiesData.getProperty("jiraApi.maxResults");
     private final String projectId = propertiesData.getProperty("jiraApi.projectId");
@@ -58,4 +55,5 @@ public class Orchestrator {
     public String getMaxWorkers() {
         return propertiesData.getProperty("jiraApi.maxWorkers");
     }
+
 }
