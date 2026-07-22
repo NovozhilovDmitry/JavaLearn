@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
@@ -22,9 +23,10 @@ public class JiraApi {
     private static HttpClient client;
     private static final CookieManager cookieManager = new CookieManager();
     private static final Logger log = LoggerFactory.getLogger(JiraApi.class);
+
     public JiraApi(String baseUrl, String userName, String password) {
         this.jiraBaseUrl = baseUrl;
-        this.authHeader = "Basic " + new String(Base64.getEncoder().encode((userName+":"+password).getBytes()));
+        this.authHeader = "Basic " + Base64.getEncoder().encodeToString((userName +":"+ password).getBytes(StandardCharsets.UTF_8));
     }
 
     static {
