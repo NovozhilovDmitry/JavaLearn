@@ -32,8 +32,3 @@ tasks.named("run") {
             "-Dstderr.encoding=UTF-8"
     ]
 }
-
-tasks.register('copylibs', Copy) {
-    from configurations.compile, configurations.testCompile
-    into 'libs'
-}
