@@ -1,81 +1,105 @@
 import api.JiraApi;
+import api.TestCasesMultiLoader;
 import bd.OracleConnection;
-import bd.SqliteConnect;
-import com.fasterxml.jackson.databind.JsonNode;
+import bd.SelectStatements;
 import json.customfield.CustomFieldParser;
 import json.customfield.fieldsdiscription.CustomField;
 import json.folders.FolderTreeExtractor;
 import json.folders.FolderTreeParser;
-import json.testcasesinfo.TestCaseParser;
+import json.testcases.TestCasesParser;
+import json.testcases.fieldsdiscription.*;
+import json.testcasesinfo.TestCaseInfoParser;
 import json.testcasesinfo.fieldsdiscription.TestCase;
 import json.tkstatus.TestCaseStatusParser;
 import json.tkstatus.fieldsdiscription.TestCaseStatus;
 import orchestrator.Orchestrator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import repository.*;
-
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
 public class Main {
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) throws Exception {
-        String dataFilePath = "src/main/resources/data/";
         Orchestrator orc = new Orchestrator();
         String connectline = orc.getBdConnectLine();
         String bdUser = orc.getBdUser();
         String bdPassword = orc.getBdPassword();
-        JiraApi jira = new JiraApi("https://jira.cbr.ru");
+        int maxPoolSize = Integer.parseInt(orc.getMaxPoolSize());
         String userName = orc.getJiraUser();
         String password = orc.getJiraPassword();
-//        String statusUrl = orc.getJiraApiTestCaseStatusUrl(); // Готово
-//        String customFieldsUrl = orc.getJiraApiCustomFieldsUrl(); // Готово
-//        String folderTreeUrl = orc.getJiraApiFolderTreeUrl(); // Готово
-        String testCasesUrl = orc.getJiraApiTestCasesUrl();
-        String maxWorkers = orc.getMaxWorkers();
+        String statusUrl = orc.getJiraApiTestCaseStatusUrl();
+        String customFieldsUrl = orc.getJiraApiCustomFieldsUrl();
+        String folderTreeUrl = orc.getJiraApiFolderTreeUrl();
+        String testCasesUrl = orc.getJiraApiTestCaseInfoUrl();
+        String tasksUrl = orc.getJiraApiTestCaseUrl();
+        List<Integer> getIdFromTkInfo;
 
-        OracleConnection ora = new OracleConnection();
-        ora.connect(connectline, bdUser, bdPassword);
+        // Устанавливаем соединение к БД
+        OracleConnection oraConnection = new OracleConnection(connectline, maxPoolSize, bdUser, bdPassword);
 
+        // Создаем объекты
+        JiraApi jira = new JiraApi("https://jira.cbr.ru", userName, password);
+        CustomFieldRepository customFields = new CustomFieldRepository();
+        TestCaseInfoRepository tkInfoRepository = new TestCaseInfoRepository();
+        SelectStatements selects = new SelectStatements();
+        TestCaseStatusRepository statusesRepository = new TestCaseStatusRepository();
+        FolderTreeRepository foldersRepository = new FolderTreeRepository();
+        CustomFieldParser parsingComponents = new CustomFieldParser();
+        TestCaseInfoParser testCases = new TestCaseInfoParser();
+        TestCaseStatusParser statusesParser = new TestCaseStatusParser();
+        FolderTreeParser folderParser = new FolderTreeParser();
+        TestCasesParser testCaseParser = new TestCasesParser();
+        TestCaseServiceRepository testCaseService = new TestCaseServiceRepository();
 
-        SqliteConnect connection = new SqliteConnect();
-//        connection.connect("mydb.db");
-//        connection.executeUpsert("""
-//                create table if not exists tk_info (
-//                id integer,
-//                key text,
-//                name text,
-//                statusid integer,
-//                folderid integer,
-//                owner text,
-//                updatedby text,
-//                updatedon date);
-//
-//                create table if not exists components (id integer, name text);
-//
-//                create table if not exists tkcommonfields (
-//                tk_id integer,
-//                approvedby name,
-//                releases text,
-//                testingtypes text,
-//                servers text,
-//                userroles text,
-//                functionalities text,
-//                apm text);
-//                """);
-        // Создали объекты
-//        CustomFieldRepository service = new CustomFieldRepository(connection);
-//        TestCaseParser customParser = new TestCaseParser();
+        // Получаем данные о последней синхронизации
+        Timestamp getSyncTkInfo = selects.getSyncInfo(oraConnection);
+
+        // Получаем данные из Jira Api справочников
+        String statusesData = jira.getDataFromUrl(statusUrl);
+        String foldersData = jira.getDataFromUrl(folderTreeUrl);
+        String componentsData = jira.getDataFromUrl(customFieldsUrl);
+        String testCaseInfoData = jira.getDataFromUrl(testCasesUrl);
+
+        // Парсим справочник статусов
+        List<TestCaseStatus> statusesFields = statusesParser.parse(statusesData);
+        statusesRepository.insertIntoTableStatuses(oraConnection, statusesFields);
+
+        // Парсим справочник каталогов
+        List<FolderTreeExtractor.Result> foldersFields = folderParser.parse(foldersData);
+        foldersRepository.insertIntoTableTkFolders(oraConnection, foldersFields);
+
         // Парсим справочник компонентов и вставляем в таблицу
-//        CustomFieldParser parsingComponent = new CustomFieldParser();
-//        List<CustomField> componentsFields = parsingComponent.parse(dataFilePath + "customfields.json");
-//        service.inserIntoTableComponents(componentsFields);
-        // Получаем словарь справочника компонентов
-//        HashMap<Integer, String> selectComponents = service.getComponentsDict();
+        List<CustomField> componentsFields = parsingComponents.parse(componentsData);
+        customFields.inserIntoTableComponents(oraConnection, componentsFields);
+
+        // Получаем словари справочников компонентов
+        HashMap<Integer, String> selectOptionComponents = customFields.getOptionComponentsDict();
+        HashMap<Integer, String> selectMainComponents = customFields.getMainComponentsDict();
+
         // Парсим общую информацию о ТК и вставляем в таблицу
-//        List<TestCase> parseTestCaseInfo = customParser.parseResults(dataFilePath + "tk_info.json");
-//        TestCaseInfoRepository tkInfoRepository = new TestCaseInfoRepository(connection);
-//        tkInfoRepository.insertIntoTkInfo(parseTestCaseInfo, selectComponents);
-//        tkInfoRepository.insertIntoTkInfo(parseTestCaseInfo);
-//        connection.disconnect();
+        List<TestCase> parseTestCaseInfo = testCases.parseResults(testCaseInfoData);
+        tkInfoRepository.insertIntoTkInfo(oraConnection, parseTestCaseInfo, selectOptionComponents, selectMainComponents);
+
+        if (getSyncTkInfo != null) {
+            getIdFromTkInfo = tkInfoRepository.getIdFromTkInfo(oraConnection);
+            log.info("Данные будут обновлены по {} тест-кейсам", getIdFromTkInfo.size());
+        } else {
+            getIdFromTkInfo = tkInfoRepository.getIdFromTkInfoWithoutCondition(oraConnection);
+            log.info("Первый запуск программы");
+        }
+
+        if (!getIdFromTkInfo.isEmpty()) {
+            System.out.println("Отправляем запросы на обновление шагов ТК");
+            TestCasesMultiLoader loader = new TestCasesMultiLoader(jira, oraConnection, testCaseParser,
+                    testCaseService, tasksUrl, maxPoolSize);
+            loader.loadTestCases(getIdFromTkInfo);
+        }
+
+        oraConnection.close();
 
     }
 }

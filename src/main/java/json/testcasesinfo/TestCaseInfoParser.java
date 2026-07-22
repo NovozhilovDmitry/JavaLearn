@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import json.testcasesinfo.fieldsdiscription.TestCase;
 import json.testcasesinfo.fieldsdiscription.TestCaseResponse;
-import java.io.File;
 import java.util.List;
 
 public class TestCaseInfoParser {

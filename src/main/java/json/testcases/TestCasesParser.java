@@ -11,7 +11,6 @@ public class TestCasesParser {
     }
 
     public TestCaseMainInformation parseResults(String json) throws IOException {
-        return mapper.readValue(json, TestCaseMainInformation.class
-        );
+        return mapper.readValue(json, TestCaseMainInformation.class);
     }
 }
