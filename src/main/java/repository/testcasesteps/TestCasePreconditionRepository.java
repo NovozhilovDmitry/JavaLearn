@@ -28,7 +28,7 @@ public class TestCasePreconditionRepository {
             ps.setInt(2, mainInformation.getMajorVersion());
             ps.setString(3, mainInformation.getObjectiveText());
             ps.setString(4, mainInformation.getPreconditionText());
-            ps.executeQuery();
+            ps.executeUpdate();
             log.info("Внесены данные в таблицу TK_PRECONDITIONS по тест-кейсу: {}", tkId);
         } catch (SQLException e) {
             log.error("Ошибка добавления данных: {}", e.getMessage(), e);
