@@ -10,10 +10,8 @@ public class TestCasesParser {
         mapper = new ObjectMapper();
     }
 
-    public TestCaseMainInformation parseResults(String path) throws IOException {
-        return mapper.readValue(
-                new File(path),
-                TestCaseMainInformation.class
+    public TestCaseMainInformation parseResults(String json) throws IOException {
+        return mapper.readValue(json, TestCaseMainInformation.class
         );
     }
 }

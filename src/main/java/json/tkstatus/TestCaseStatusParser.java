@@ -12,9 +12,7 @@ public class TestCaseStatusParser {
         mapper = new ObjectMapper();
     }
 
-    public List<TestCaseStatus> parse(String path) throws Exception {
-        return mapper.readValue(
-                new File(path),
-                new TypeReference<List<TestCaseStatus>>() {});
+    public List<TestCaseStatus> parse(String json) throws Exception {
+        return mapper.readValue(json, new TypeReference<>() {});
     }
 }

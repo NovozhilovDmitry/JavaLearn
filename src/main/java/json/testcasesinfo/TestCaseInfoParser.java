@@ -14,9 +14,7 @@ public class TestCaseInfoParser {
         mapper.registerModule(new JavaTimeModule());
     }
 
-    public List<TestCase> parseResults(String path) throws Exception {
-        return mapper.readValue(
-                new File(path),
-                TestCaseResponse.class).getResults();
+    public List<TestCase> parseResults(String json) throws Exception {
+        return mapper.readValue(json, TestCaseResponse.class).getResults();
     }
 }
