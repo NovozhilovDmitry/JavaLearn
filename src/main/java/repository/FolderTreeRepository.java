@@ -1,6 +1,6 @@
 package repository;
 
-import bd.OracleConnect;
+import bd.OracleConnection;
 import json.folders.FolderTreeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,13 +8,10 @@ import java.sql.*;
 import java.util.List;
 
 public class FolderTreeRepository {
-    private final Connection conn;
-    public FolderTreeRepository(OracleConnect connection) {
-        this.conn = connection.getConnection();
-    }
     private static final Logger log = LoggerFactory.getLogger(FolderTreeRepository.class);
 
-    public void insertIntoTableTkFolders(List<FolderTreeExtractor.Result> fields) throws SQLException {
+    public void insertIntoTableTkFolders(OracleConnection connection,
+                                         List<FolderTreeExtractor.Result> fields) throws SQLException {
         String sql =
                 """
                 MERGE into tkfolders c
@@ -26,21 +23,23 @@ public class FolderTreeRepository {
                     INSERT (id, name) values (t.id, t.name)
                 """;
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (FolderTreeExtractor.Result info: fields) {
-                if (info.id != 0 && info.name != null && !info.name.isEmpty()) {
-                    ps.setLong(1, info.id);
-                    ps.setString(2, info.name);
-                    ps.addBatch();
+        try(Connection conn = connection.getConnection()) {
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                for (FolderTreeExtractor.Result info: fields) {
+                    if (info.id != 0 && info.name != null && !info.name.isEmpty()) {
+                        ps.setLong(1, info.id);
+                        ps.setString(2, info.name);
+                        ps.addBatch();
+                    }
                 }
+                ps.executeBatch();
+                log.info("Внесены данные в таблицу TKFOLDERS");
+                new SyncInfoRepository().insertIntoTableSyncInfo(connection, "TKFOLDERS");
+                conn.commit();
+            } catch (SQLException e) {
+                log.error("Ошибка добавления данных: {}", e.getMessage(), e);
+                conn.rollback();
             }
-            ps.executeBatch();
-            log.info("Внесены данные в таблицу TKFOLDERS");
-            new SyncInfoRepository(conn).insertIntoTableSyncInfo("TKFOLDERS");
-            conn.commit();
-        } catch (SQLException e) {
-            log.error("Ошибка добавления данных: {}", e.getMessage(), e);
-            conn.rollback();
         }
     }
 }
