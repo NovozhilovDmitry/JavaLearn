@@ -23,6 +23,10 @@ public class Orchestrator {
         return propertiesData.getProperty("bd.connectLine");
     }
 
+    public String getBdMaxPoolSize() {
+        return propertiesData.getProperty("bd.maxPoolSize");
+    }
+
     public String getJiraUser() {
         return propertiesData.getProperty("jiraApi.user");
     }
@@ -52,6 +56,6 @@ public class Orchestrator {
     }
 
     public String getMaxWorkers() {
-        return propertiesData.getProperty("max.workers");
+        return propertiesData.getProperty("jiraApi.maxWorkers");
     }
 }

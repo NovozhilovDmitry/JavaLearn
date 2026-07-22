@@ -11,12 +11,15 @@ public class OracleConnection {
     private static final Logger log = LoggerFactory.getLogger(OracleConnection.class);
     private final HikariDataSource dataSource;
 
-    public OracleConnection(String dbPath, String user, String password) {
+    public OracleConnection(String dbPath,
+                            int maxPoolSize,
+                            String user,
+                            String password) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:oracle:thin:@//" + dbPath);
         config.setUsername(user);
         config.setPassword(password);
-        config.setMaximumPoolSize(10); // Максимальное количество соединений
+        config.setMaximumPoolSize(maxPoolSize); // Максимальное количество соединений
         config.setMinimumIdle(2); // Минимальное количество постоянно открытых соединений
         config.setConnectionTimeout(30000); // Таймаут ожидания свободного соединения
         config.setMaxLifetime(1800000); // Время жизни соединения
